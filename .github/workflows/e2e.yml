@@ -77,6 +77,7 @@ jobs:
         env:
           PLAYWRIGHT_BASE_URL: ${{ github.event.client_payload.url || inputs.url }}
           VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+          CAPTURE_MAILBOX_TOKEN: ${{ secrets.CAPTURE_MAILBOX_TOKEN }}
         run: pnpm test:e2e
 
       - name: Redact the bypass cookie from the traces

@@ -1,0 +1,12 @@
+[Unit]
+Description=FOA: restore drill of the pg-prod backups into a throwaway container
+Documentation=file:/srv/foa/docker/README.md
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+TimeoutStartSec=6h
+# Reads the pgBackRest repo read-only; never enters pg-prod or pg-nonprod.
+# Result: /var/log/foa/restore-drills.jsonl (one JSON line per run).
+ExecStart=/srv/foa/docker/scripts/restore-drill.sh

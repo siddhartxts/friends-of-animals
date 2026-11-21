@@ -18,6 +18,7 @@ systemctl enable --now \
   foa-cert-renew.timer \
   foa-pgbackrest-full.timer \
   foa-pgbackrest-diff.timer \
-  foa-preview-sweep.timer
+  foa-preview-sweep.timer \
+  foa-restore-drill.timer
 
 systemctl list-timers 'foa-*' --no-pager

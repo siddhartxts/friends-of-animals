@@ -21,6 +21,7 @@ export default defineConfig({
     include: [
       "src/**/*.test.{ts,tsx}",
       "scripts/**/*.test.ts",
+      "docker/**/*.test.ts",
       "tests/e2e/**/*.test.ts",
     ],
     environment: "node",
