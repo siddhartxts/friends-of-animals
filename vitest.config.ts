@@ -25,5 +25,6 @@ export default defineConfig({
       "tests/e2e/**/*.test.ts",
     ],
     environment: "node",
+    setupFiles: ["./src/test/setup.ts"],
   },
 });

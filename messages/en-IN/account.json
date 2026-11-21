@@ -1,0 +1,17 @@
+{
+  "account": {
+    "sessions": {
+      "meta": {
+        "title": "Your sessions",
+        "description": "Where you are signed in to Friends of Animals."
+      },
+      "eyebrow": "Your account",
+      "title": "Your sessions",
+      "lead": "Where you're signed in to Friends of Animals.",
+      "loading": "Loading your account…",
+      "signedInAs": "You're signed in as {name} ({email}).",
+      "signOut": "Sign out",
+      "signingOut": "Signing out…"
+    }
+  }
+}

@@ -33,9 +33,16 @@ describe("someUseCase", () => {
 | `h.visitor(meta?)` | A signed-out actor with documentation IP `203.0.113.10`; pass `{ ip }` to vary it                          |
 | `h.seed`           | Builders from `src/server/seed/` (`member()`, `preview()`), writing with this database and clock           |
 | `h.clock`          | `FakeClock`: `now()`, `advance({ minutes: 10 })`, `set(instant)`. Starts at `DEFAULT_TEST_INSTANT`         |
-| `h.email`          | `FakeEmail`: `sent`, `lastTo(address)`, `failNext(n, error)`                                               |
+| `h.email`          | `FakeEmail`: `sent`, `lastTo(address)`, `codeFor(address)`, `failNext(n, error)`                           |
+| `h.signIn(user)`   | Signs `user` in through the real email-code flow (fresh IP) and returns the signed-in actor                |
+| `h.currentActor()` | Who the server sees on the browser's next request, from `h.cookies`, resolved as in production             |
+| `h.cookies`        | The browser's cookie store; `header()` saves a browser to pass to `currentActor(meta, cookie)` later       |
 | `h.db`             | This test's database, for asserting on rows (audit rows count as behaviour)                                |
 | `h.deps`           | `{ db, clock, email }`: what `productionDeps()` wires for real in `src/server/deps.ts`                     |
+
+`createHarness()` also fakes the system clock (`Date` only) and keeps it on
+`h.clock`, because Better Auth reads `new Date()` for code and session expiry.
+`src/test/setup.ts` puts real timers back after every test.
 
 Each `createHarness()` builds a fresh database (a clone of a template migrated
 once per Vitest worker, about 0.4 s) and fresh fakes, so tests share nothing.

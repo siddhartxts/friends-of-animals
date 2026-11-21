@@ -30,6 +30,11 @@ _Avoid_: Caller, principal, current user
 One signed-in device or browser of a User, which the User can see and end.
 _Avoid_: Login, token
 
+**Sign-in code**:
+A short-lived number emailed (or, later, texted) to a User to prove they hold
+that address; it is how people sign up and sign in, with no password.
+_Avoid_: OTP (in copy), password, token
+
 ## Messages
 
 **Capture mailbox**:

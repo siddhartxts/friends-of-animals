@@ -86,4 +86,14 @@ describe("<SubmitButton>", () => {
     expect(html).toContain("Send code");
     expect(html).not.toMatch(/ disabled=""/);
   });
+
+  it("tells the action which button was pressed", () => {
+    const html = renderToStaticMarkup(
+      <SubmitButton name="step" value="resend" pendingLabel="Sending…">
+        Send a new code
+      </SubmitButton>
+    );
+    expect(html).toMatch(/<button[^>]* name="step"/);
+    expect(html).toMatch(/<button[^>]* value="resend"/);
+  });
 });

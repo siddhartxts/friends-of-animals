@@ -3,6 +3,9 @@ import { type NextRequest, NextResponse } from "next/server";
 import { competitionParams } from "@/app/competitions/_lib/view";
 import { isStorySlug } from "@/content/stories";
 import { getSampleCompetitions } from "@/content/sample";
+import { isSignedInPath } from "@/lib/app-routes";
+import { ROUTES } from "@/lib/routes";
+import { hasSessionCookie } from "@/server/identity/session-cookie";
 
 // Unlisted slugs render at request time, and the header's <Suspense> starts
 // streaming before the page's notFound() runs, so they kept a 200 status
@@ -16,6 +19,14 @@ const COMPETITION_SLUGS = new Set(
 const MISSING = "/__not-found";
 
 export function proxy(request: NextRequest) {
+  // Pages behind sign-in: a request without a session cookie goes straight
+  // to sign in. With one, the page checks the session itself.
+  if (isSignedInPath(request.nextUrl.pathname)) {
+    return hasSessionCookie(request.headers)
+      ? NextResponse.next()
+      : NextResponse.redirect(new URL(ROUTES.signIn.path, request.url));
+  }
+
   const [, section, raw = ""] = request.nextUrl.pathname.split("/");
   let slug: string;
   try {
@@ -31,5 +42,10 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/blog/:slug", "/competitions/:slug"],
+  matcher: [
+    "/blog/:slug",
+    "/competitions/:slug",
+    "/account",
+    "/account/:path*",
+  ],
 };

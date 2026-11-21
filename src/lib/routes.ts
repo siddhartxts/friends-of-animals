@@ -2,7 +2,8 @@
  * The one registry of public routes. The header, footer and sitemap read it,
  * so a page that isn't here isn't linked. Labels live in messages/en-IN/nav.json
  * under nav.links.<id>. Spec modules that aren't built yet (gallery,
- * transparency, login, events, volunteer, adopt, NGOs, auctions) stay out.
+ * transparency, events, volunteer, adopt, NGOs, auctions) stay out. Pages
+ * behind sign-in are in src/lib/app-routes.ts.
  */
 
 /** Section colour each page leans on. */
@@ -132,6 +133,8 @@ const DEFINITIONS = {
     sitemap: { updated: UPDATED, priority: 0.3 },
   },
   styleguide: { path: "/styleguide", hue: "multi", nonProduction: true },
+  signUp: { path: "/sign-up", hue: "blue" },
+  signIn: { path: "/sign-in", hue: "blue", footer: "takePart" },
 } as const satisfies Record<string, RouteDef>;
 
 export type RouteId = keyof typeof DEFINITIONS;

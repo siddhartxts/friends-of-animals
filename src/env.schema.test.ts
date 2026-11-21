@@ -10,6 +10,7 @@ import {
 
 const DATABASE_URL = "postgres://foa:foa@localhost:5432/foa";
 const SITE = "https://shipped-it.dev";
+const SECRET = "0123456789abcdef0123456789abcdef";
 
 describe("parseEnv", () => {
   it("treats empty strings as unset", () => {
@@ -191,9 +192,47 @@ describe("envSchema", () => {
 
   it("only needs them on previews", () => {
     expect(
-      parseEnv(envSchema, { DATABASE_URL, APP_ENV: "staging", APP_URL: SITE })
-        .APP_ENV
+      parseEnv(envSchema, {
+        DATABASE_URL,
+        APP_ENV: "staging",
+        APP_URL: SITE,
+        BETTER_AUTH_SECRET: SECRET,
+      }).APP_ENV
     ).toBe("staging");
+  });
+
+  it.each(["staging", "production"])(
+    "requires BETTER_AUTH_SECRET on %s",
+    (APP_ENV) => {
+      expect(() =>
+        parseEnv(envSchema, { DATABASE_URL, APP_ENV, APP_URL: SITE })
+      ).toThrow(/BETTER_AUTH_SECRET is not set[\s\S]*at BETTER_AUTH_SECRET/);
+    }
+  );
+
+  it("lets a local run or a preview go without BETTER_AUTH_SECRET", () => {
+    expect(parseEnv(envSchema, { DATABASE_URL }).BETTER_AUTH_SECRET).toBe(
+      undefined
+    );
+  });
+
+  it("refuses a BETTER_AUTH_SECRET shorter than 32 characters", () => {
+    expect(() =>
+      parseEnv(envSchema, { DATABASE_URL, BETTER_AUTH_SECRET: "short" })
+    ).toThrow(/at least 32 characters[\s\S]*at BETTER_AUTH_SECRET/);
+  });
+
+  it("reads CAPTURE_MAILBOX_TOKEN, which may be left out", () => {
+    expect(parseEnv(envSchema, { DATABASE_URL }).CAPTURE_MAILBOX_TOKEN).toBe(
+      undefined
+    );
+    expect(
+      parseEnv(envSchema, { DATABASE_URL, CAPTURE_MAILBOX_TOKEN: SECRET })
+        .CAPTURE_MAILBOX_TOKEN
+    ).toBe(SECRET);
+    expect(() =>
+      parseEnv(envSchema, { DATABASE_URL, CAPTURE_MAILBOX_TOKEN: "short" })
+    ).toThrow(/at least 32 characters[\s\S]*at CAPTURE_MAILBOX_TOKEN/);
   });
 });
 

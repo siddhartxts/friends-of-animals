@@ -49,6 +49,11 @@ export class FakeEmail implements EmailSender {
     return this.inbox(to)[0];
   }
 
+  /** The sign-in code (six digits) in the newest message to `to`. */
+  codeFor(to: string): string | undefined {
+    return /\b(\d{6})\b/.exec(this.lastTo(to)?.text ?? "")?.[1];
+  }
+
   /** Makes the next `count` sends reject with `error`; nothing is stored. */
   failNext(count: number, error = new Error("FakeEmail: send failed")): void {
     this.#failures = Array.from({ length: count }, () => error);

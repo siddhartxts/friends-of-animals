@@ -38,8 +38,19 @@ export const DEFAULT_TEST_INSTANT = "2027-01-15T04:30:00.000Z";
 export class FakeClock implements Clock {
   #now: number;
 
-  constructor(start: Date | string = DEFAULT_TEST_INSTANT) {
+  readonly #onChange: ((now: Date) => void) | undefined;
+
+  /**
+   * `onChange` hears every move. The harness uses it to keep the system
+   * clock (which Better Auth reads) on the same instant.
+   */
+  constructor(
+    start: Date | string = DEFAULT_TEST_INSTANT,
+    { onChange }: { onChange?: (now: Date) => void } = {}
+  ) {
     this.#now = new Date(start).getTime();
+    this.#onChange = onChange;
+    onChange?.(this.now());
   }
 
   now(): Date {
@@ -49,6 +60,7 @@ export class FakeClock implements Clock {
   /** Jumps to `instant`, in either direction. */
   set(instant: Date | string): void {
     this.#now = new Date(instant).getTime();
+    this.#onChange?.(this.now());
   }
 
   /** Moves time forward by `duration` and returns the new instant. */
@@ -60,6 +72,7 @@ export class FakeClock implements Clock {
       );
     }
     this.#now += step;
+    this.#onChange?.(this.now());
     return this.now();
   }
 }

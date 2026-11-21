@@ -25,7 +25,9 @@
       "childProtection": "Child protection policy",
       "pricing": "Pricing",
       "refunds": "Refunds and cancellations",
-      "styleguide": "Style guide"
+      "styleguide": "Style guide",
+      "signUp": "Create an account",
+      "signIn": "Sign in"
     }
   }
 }

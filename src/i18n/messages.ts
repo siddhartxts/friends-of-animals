@@ -3,7 +3,9 @@
 // Adding a namespace: create messages/en-IN/<name>.json ({ "<name>": {} }),
 // import it here and add it to NAMESPACES and `messages`.
 import a11y from "../../messages/en-IN/a11y.json";
+import account from "../../messages/en-IN/account.json";
 import about from "../../messages/en-IN/about.json";
+import auth from "../../messages/en-IN/auth.json";
 import awareness from "../../messages/en-IN/awareness.json";
 import common from "../../messages/en-IN/common.json";
 import competitions from "../../messages/en-IN/competitions.json";
@@ -27,7 +29,9 @@ import styleguide from "../../messages/en-IN/styleguide.json";
 
 export const NAMESPACES = [
   "a11y",
+  "account",
   "about",
+  "auth",
   "awareness",
   "common",
   "competitions",
@@ -55,7 +59,9 @@ export type Namespace = (typeof NAMESPACES)[number];
 /** en-IN messages, merged: { common: {...}, nav: {...}, ... }. */
 export const messages = {
   ...a11y,
+  ...account,
   ...about,
+  ...auth,
   ...awareness,
   ...common,
   ...competitions,
