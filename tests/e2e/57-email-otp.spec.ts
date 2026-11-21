@@ -47,7 +47,12 @@ test("a visitor signs up by email code, signs out and signs back in", async ({
   await expectAccessible(page, "/account/sessions");
   await expectAccessibleInDark(page, "/account/sessions");
 
-  await page.getByRole("button", { name: "Sign out" }).click();
+  await page
+    .getByRole("region", { name: "Signed in on" })
+    .getByRole("listitem")
+    .filter({ hasText: "This device" })
+    .getByRole("button", { name: /^Sign out/ })
+    .click();
   await expect(page).toHaveURL(/\/sign-in$/);
 
   await askForCode(page, email);

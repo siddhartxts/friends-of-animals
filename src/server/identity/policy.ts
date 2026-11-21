@@ -9,7 +9,10 @@ export type IdentityAction =
   | "requestEmailCode"
   | "verifyEmailCode"
   | "getAccount"
-  | "signOut";
+  | "signOut"
+  | "listSessions"
+  | "signOutSession"
+  | "signOutEverywhere";
 
 export function can(actor: Actor, action: IdentityAction): boolean {
   switch (action) {
@@ -19,6 +22,9 @@ export function can(actor: Actor, action: IdentityAction): boolean {
       return actor.kind === "visitor";
     case "getAccount":
     case "signOut":
+    case "listSessions":
+    case "signOutSession":
+    case "signOutEverywhere":
       // Their own account and session only: there is no id to name another.
       return actor.kind === "user";
   }

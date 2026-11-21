@@ -10,8 +10,20 @@
       "lead": "Where you're signed in to Friends of Animals.",
       "loading": "Loading your account…",
       "signedInAs": "You're signed in as {name} ({email}).",
+      "listTitle": "Signed in on",
+      "device": "{browser} on {os}",
+      "deviceBrowserOnly": "{browser}",
+      "deviceOsOnly": "A browser on {os}",
+      "deviceUnknown": "An unknown browser",
+      "thisDevice": "This device",
+      "started": "Signed in {date}",
+      "ip": "IP address {ip}",
       "signOut": "Sign out",
-      "signingOut": "Signing out…"
+      "signOutOf": "of {device}, signed in {date}",
+      "signingOut": "Signing out…",
+      "everywhereTitle": "Sign out everywhere",
+      "everywhereLead": "Signs you out on every device on this list, this one too. Use it if you lose a phone or signed in on a shared computer.",
+      "everywhere": "Sign out everywhere"
     }
   }
 }

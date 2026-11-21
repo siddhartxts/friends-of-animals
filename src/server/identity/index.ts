@@ -4,6 +4,12 @@
 import type { UseCaseContext } from "../use-cases";
 import { getAccount, signOut } from "./account";
 import {
+  listSessions,
+  signOutEverywhere,
+  signOutSession,
+  type SignOutSessionInput,
+} from "./sessions";
+import {
   requestEmailCode,
   verifyEmailCode,
   type RequestEmailCodeInput,
@@ -11,6 +17,7 @@ import {
 } from "./email-code";
 
 export type { Account } from "./account";
+export type { SessionSummary, SignOutSessionResult } from "./sessions";
 export type {
   RequestEmailCodeResult,
   VerifyEmailCodeResult,
@@ -24,4 +31,7 @@ export const identityUseCases = (ctx: UseCaseContext) => ({
   verifyEmailCode: (input: VerifyEmailCodeInput) => verifyEmailCode(ctx, input),
   getAccount: () => getAccount(ctx),
   signOut: () => signOut(ctx),
+  listSessions: () => listSessions(ctx),
+  signOutSession: (input: SignOutSessionInput) => signOutSession(ctx, input),
+  signOutEverywhere: () => signOutEverywhere(ctx),
 });
