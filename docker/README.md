@@ -18,8 +18,8 @@ Compose project `foa-vps` (`docker/compose.yml`), network `db` =
 - **pg-prod** holds production only: database `foa`. `shared_buffers` 4 GB,
   WAL archived by pgBackRest (`archive_timeout` 60 s).
 - **pg-nonprod** holds `foa_staging`, the template `foa_seed` and one
-  database per preview (`foa_pr_<n>`, `foa_br_<slug>_<hash>`). No archiving,
-  no PITR.
+  database per preview (`foa_pr_<n>_<fp>`, `foa_br_<slug>_<hash>_<fp>`). No
+  archiving, no PITR.
 - **PgBouncer** is the only public endpoint: `db.shipped-it.dev:6432`, TLS
   required (Let's Encrypt), SCRAM, transaction pooling.
 
@@ -81,13 +81,17 @@ so every preview function can read the preview's `DIRECT_URL`, and a shared
 migrator role could drop staging. The preview roles cannot connect to
 `foa_staging` at all, and the staging roles reach nothing else.
 
-The app swaps the `/foa_pr` path for `foa_pr_<n>` or `foa_br_<slug>_<hash>`
-(`src/server/db/database-url.ts`; the hash, 8 hex characters of the branch's
-SHA-256, keeps branches with the same slug apart). The
+The app swaps the `/foa_pr` path for `foa_pr_<n>_<fp>` or
+`foa_br_<slug>_<hash>_<fp>` (`src/server/db/database-url.ts`; the hash, 8 hex
+characters of the branch's SHA-256, keeps branches with the same slug apart;
+`<fp>`, 8 hex characters of the SHA-256 of `drizzle/meta/_journal.json`'s tags
+and dates, gives a PR a fresh database whenever its migrations change). The
 preview build connects as `nonprod_migrator` to database `postgres` and runs
-`CREATE DATABASE foa_pr_<n> TEMPLATE foa_seed` (treat SQLSTATE 42P04 as
-success), then `COMMENT ON DATABASE foa_pr_<n> IS 'foa-preview pr=<n>'` (or
-`'foa-preview branch=<ref>'`) so the sweeper can find it.
+`CREATE DATABASE foa_pr_<n>_<fp> TEMPLATE foa_seed` (treat SQLSTATE 42P04 as
+success), then `COMMENT ON DATABASE foa_pr_<n>_<fp> IS 'foa-preview pr=<n>'`
+(or `'foa-preview branch=<ref>'`) so the sweeper can find it. A PR whose
+migrations changed keeps its older databases until it closes; the sweeper
+then drops them all, since they share the comment.
 
 Node/postgres.js verifies the certificate with its built-in CA store. libpq
 tools (psql, pg_dump) need `sslrootcert=system` (or `PGSSLROOTCERT`) for

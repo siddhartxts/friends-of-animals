@@ -1,0 +1,5 @@
+# Barrels that every schema ticket adds one `export *` line to. Union merges
+# keep both branches' lines instead of conflicting. Never use merge=union on
+# JSON: drizzle/meta/* is regenerated, not merged.
+src/server/db/schema/index.ts merge=union
+src/server/seed/index.ts merge=union

@@ -6,7 +6,7 @@
 -- build migrates with; the preview roles must not be able to touch staging.
 --
 --   nonprod_migrator  previews: CREATEDB; owns foa_seed and every preview
---                     database it creates (`CREATE DATABASE foa_pr_<n>
+--                     database it creates (`CREATE DATABASE foa_pr_<n>_<fp>
 --                     TEMPLATE foa_seed`, connected to database `postgres`).
 --   nonprod_app       previews' runtime role: DML only.
 --   staging_migrator  staging: owns foa_staging; no CREATEDB.

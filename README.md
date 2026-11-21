@@ -102,9 +102,10 @@ Ports are published on `127.0.0.1` only, because Docker's published ports bypass
 | `pnpm test:e2e`                     | Playwright journeys and axe against a deployment ([End-to-end tests](#end-to-end-tests))                                            |
 | `pnpm db:generate`                  | Create a migration from schema changes (needs `DIRECT_URL` set, even though it does not connect)                                    |
 | `pnpm db:migrate`                   | Apply pending migrations                                                                                                            |
+| `pnpm db:seed`                      | Add the seed accounts to a local or preview database (idempotent; does nothing on staging and production)                           |
 | `pnpm db:studio`                    | Open Drizzle Studio                                                                                                                 |
 | `pnpm brand:assets`                 | Regenerate the logo PNGs and icons in `public/brand/` from the SVG master                                                           |
-| `pnpm vercel-build`                 | Migrate, then build (Vercel runs this)                                                                                              |
+| `pnpm vercel-build`                 | Migrate, seed, then build (Vercel runs this)                                                                                        |
 
 ## Project layout
 
@@ -182,7 +183,7 @@ Both URLs point at PgBouncer on the VPS, `db.shipped-it.dev:6432`, with `?sslmod
 
 The app roles can only read and write rows, and PgBouncer pools them by transaction. The migrator roles own the schema and get session mode through a per-user `pool_mode`, so the migration's advisory lock holds. Staging and previews have separate roles: Vercel has no build-only variables, so any preview function could use the preview's `DIRECT_URL`, and the preview roles cannot connect to `foa_staging` at all.
 
-Every preview gets a database of its own. With `APP_ENV=preview`, `src/server/db/database-url.ts` replaces the placeholder with `foa_pr_<n>` from `VERCEL_GIT_PULL_REQUEST_ID`, or, before the branch has a PR, `foa_br_<slug>_<hash>` from `VERCEL_GIT_COMMIT_REF`: the branch lowercased with other characters turned into `_`, cut so the name fits 63 bytes, then 8 hex characters of the branch's SHA-256. The hash is always added, so branches such as `feat/a-b` and `feat/a.b` never share a database. `pnpm db:migrate` first runs `CREATE DATABASE <name> TEMPLATE foa_seed` (an existing database counts as success) and comments the database `foa-preview pr=<n>` or `foa-preview branch=<ref>`. An hourly sweeper on the VPS reads that comment and drops the databases of closed PRs and deleted branches.
+Every preview gets a database of its own. With `APP_ENV=preview`, `src/server/db/database-url.ts` replaces the placeholder with `foa_pr_<n>_<fp>` from `VERCEL_GIT_PULL_REQUEST_ID`, or, before the branch has a PR, `foa_br_<slug>_<hash>_<fp>` from `VERCEL_GIT_COMMIT_REF`: the branch lowercased with other characters turned into `_`, cut so the name fits 63 bytes, then 8 hex characters of the branch's SHA-256. The hash is always added, so branches such as `feat/a-b` and `feat/a.b` never share a database. `<fp>` is the migrations fingerprint: 8 hex characters of the SHA-256 of every migration's tag and date in `drizzle/meta/_journal.json`, bundled into the build. When a branch's migrations are added to, regenerated or renumbered, its next deployment gets a fresh database, because Drizzle's migrator can't apply re-dated migrations to a database that ran the old ones. `pnpm db:migrate` first runs `CREATE DATABASE <name> TEMPLATE foa_seed` (an existing database counts as success) and comments the database `foa-preview pr=<n>` or `foa-preview branch=<ref>`. An hourly sweeper on the VPS reads that comment and drops the databases of closed PRs and deleted branches.
 
 ## Testing
 
@@ -281,11 +282,11 @@ The app runs on Vercel Pro with its functions in `bom1` (Mumbai), set in `vercel
 
 Every push to `main` deploys staging. The `production` branch doesn't exist yet: production stays dormant until FOA's domain is added to it, then `production` is created from `main` and pushed. Promoting a staging deployment to Production in Vercel rebuilds it with the Production variables, so it runs the migrations against `pg-prod`.
 
-Vercel detects Next.js and runs the `vercel-build` script, which applies the migrations and then builds:
+Vercel detects Next.js and runs the `vercel-build` script, which applies the migrations, seeds a preview's database and then builds:
 
 - Migrations connect through `DIRECT_URL` only (the migrator role, which PgBouncer gives session mode), never `DATABASE_URL`. It must be available at **build** time: without it `pnpm db:migrate` exits with an error and the deployment fails.
-- Staging and production migrate the database `DIRECT_URL` names (`foa_staging`, `foa`) in place. Each preview deployment gets its own database (`foa_pr_<n>`, or `foa_br_<slug>_<hash>` before its PR) on the non-production Postgres, created during the build ([Databases on Vercel](#databases-on-vercel)).
-- The databases (Postgres 18 on the Mumbai VPS behind PgBouncer, with backups, and the `foa_seed` template) are set up in [#12](https://github.com/SiddharthMuramkar/friends-of-animals/issues/12), from `docker/` (runbook: [`docker/README.md`](docker/README.md)). Until `scripts/seed.ts` exists, `foa_seed` is empty and previews start with the schema only.
+- Staging and production migrate the database `DIRECT_URL` names (`foa_staging`, `foa`) in place. Each preview deployment gets its own database (`foa_pr_<n>_<fp>`, or `foa_br_<slug>_<hash>_<fp>` before its PR) on the non-production Postgres, created during the build ([Databases on Vercel](#databases-on-vercel)).
+- The databases (Postgres 18 on the Mumbai VPS behind PgBouncer, with backups, and the `foa_seed` template) are set up in [#12](https://github.com/SiddharthMuramkar/friends-of-animals/issues/12), from `docker/` (runbook: [`docker/README.md`](docker/README.md)). `foa_seed` stays empty: after migrating, `pnpm db:seed` (`scripts/seed.ts`) fills a preview's own database with the seed accounts. It is idempotent, and on staging and production it exits without connecting.
 
 Set `APP_ENV`, `DATABASE_URL` and `DIRECT_URL` per environment in the Vercel project settings, and `APP_URL` for staging (`https://shipped-it.dev`) and production; without them the build fails. Vercel exposes them to the build as well as at runtime, which `APP_URL` needs.
 

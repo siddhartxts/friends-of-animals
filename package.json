@@ -17,10 +17,11 @@
     "check": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm test",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx scripts/migrate.ts",
+    "db:seed": "tsx scripts/seed.ts",
     "db:studio": "drizzle-kit studio",
     "brand:assets": "tsx scripts/brand-assets.ts",
     "check:build": "tsx scripts/check-build.ts",
-    "vercel-build": "pnpm db:migrate && next build && pnpm check:build",
+    "vercel-build": "pnpm db:migrate && pnpm db:seed && next build && pnpm check:build",
     "test:e2e": "playwright test"
   },
   "dependencies": {
