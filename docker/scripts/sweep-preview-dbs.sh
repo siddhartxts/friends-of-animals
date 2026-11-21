@@ -16,7 +16,7 @@
 # Usage: sudo sweep-preview-dbs.sh [--dry-run]
 set -euo pipefail
 
-REPO=SiddharthMuramkar/friends-of-animals
+REPO=siddhartxts/friends-of-animals
 CONTAINER=foa-pg-nonprod
 DRY_RUN=0
 

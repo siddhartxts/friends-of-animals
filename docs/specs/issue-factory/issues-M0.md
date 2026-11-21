@@ -55,7 +55,7 @@ blockers are open M0 tickets, `total_blocked_by` = `blocked_by`).
 | #68 | 13 | 1 | 0 | #61 (or #63: count-equivalent; treat both as blockers) | none |
 
 Runtime check the Orchestrator runs before wave 0 (edges, not counts):
-`gh api repos/SiddharthMuramkar/friends-of-animals/issues/<n>/dependencies/blocked_by --jq '[.[].number]'`
+`gh api repos/siddhartxts/friends-of-animals/issues/<n>/dependencies/blocked_by --jq '[.[].number]'`
 for n in 57..68 (on a VPS runner), or GraphQL `issue(number:<n>){ blockedBy(first:20){ nodes{ number state } } }`.
 Do NOT use the search qualifiers `blocked-by:<n>` / `blocking:<n>`: they returned unrelated issues
 (#12, #37, #40, #52, #55) in testing; they are not dependency filters.

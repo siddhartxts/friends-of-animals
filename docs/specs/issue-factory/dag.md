@@ -118,7 +118,7 @@ Input to the execution spec. Built 2026-11-19 from `research/issues-M*.md`, `dep
   7. Errors: issues-M1.md counts 24 units (is 22); M0-M2 files say `factory/trunk` (now `M0`…`M8`); native edges omit
      technical prerequisites (#58, #84 block nothing natively; #79 needs #63): §1.2 carries them.
 - Runtime replacement (bootstrap 4): `for n in $(seq 57 135); do gh api
-  repos/SiddharthMuramkar/friends-of-animals/issues/$n/dependencies/blocked_by --jq '[.[].number]'; done` where REST works
+  repos/siddhartxts/friends-of-animals/issues/$n/dependencies/blocked_by --jq '[.[].number]'; done` where REST works
   (T2; the cloud proxy blocks GraphQL), else GitHub MCP `issue_read`, else the owner pastes the loop's JSON into the ledger.
   Replace column-3 edges, keep extras, rerun the model, log each added/removed edge in the ledger.
 
@@ -313,7 +313,7 @@ Day 1 measures A7 = AH_dry / Δ`seven_day` (AH_dry = dry-run agent active minute
 Day 0, owner:
 1. Merge PR #137 (`.claude/skills`) into `main`, then `main` into `M0` (fallback: Orchestrator merges
    `claude/stoic-thompson-ukn0dx` into `M0`).
-2. Approve Vercel MCP `authorize_team_access` for team `acme-ef4b`.
+2. Approve Vercel MCP `authorize_team_access` for team `bitacu1`.
 3. Vercel env (R0-1): `BETTER_AUTH_SECRET` (Preview, staging, Production; distinct), `CAPTURE_MAILBOX_TOKEN` (Preview,
    staging) + GitHub Actions secret.
 4. Merge to `main` the `e2e.yml` change passing `CAPTURE_MAILBOX_TOKEN` to Playwright (R0-2); without it the preview gate

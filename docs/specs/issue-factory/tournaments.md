@@ -34,7 +34,7 @@ at runtime and overrides this register per 2.2.
    verbatim with parent numbering ("AC 1, 2, 3 of #70"), a `Blocked by:` line, the Claude Code footer.
 3. Link: `sub_issue_write` method `add`, `sub_issue_id` = the child's REST `id` (not its number). Parent stays under #55.
 4. Edges: a child inherits the parent's blockers plus its sibling order (ledger `extraBlockers`); native edges only from T2
-   (`gh api -X POST repos/SiddharthMuramkar/friends-of-animals/issues/<child>/dependencies/blocked_by -f issue_id=<REST id>`).
+   (`gh api -X POST repos/siddhartxts/friends-of-animals/issues/<child>/dependencies/blocked_by -f issue_id=<REST id>`).
    Dependents of a split parent wait for all its children unless 1.3 re-points them.
 5. Parent: add `factory:split` (the frontier skips it), keep `ready-for-agent`, stay open as the umbrella; its status comment
    lists the children as checkboxes. Each child gets its own ticket branch, draft PR (`Refs #<child>`) and merge commit.

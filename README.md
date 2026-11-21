@@ -2,7 +2,7 @@
 
 The web platform for **Friends of Animals (FOA)**, a non-profit in India that nurtures compassion for animals among children and young adults through creative competitions, community, awareness, adoption facilitation and fundraising.
 
-Right now the app is the bare foundation: a brand landing page, the site shell, the database layer and the test harness. The public site arrives in [#14](https://github.com/SiddharthMuramkar/friends-of-animals/issues/14).
+Right now the app is the bare foundation: a brand landing page, the site shell, the database layer and the test harness. The public site arrives in [#14](https://github.com/siddhartxts/friends-of-animals/issues/14).
 
 ---
 
@@ -25,7 +25,7 @@ Right now the app is the bare foundation: a brand landing page, the site shell, 
 
 ## Tech stack
 
-The stack and hosting layout were locked in [#11](https://github.com/SiddharthMuramkar/friends-of-animals/issues/11). In this repo today:
+The stack and hosting layout were locked in [#11](https://github.com/siddhartxts/friends-of-animals/issues/11). In this repo today:
 
 | Layer              | Choice                                                                                                               |
 | ------------------ | -------------------------------------------------------------------------------------------------------------------- |
@@ -54,7 +54,7 @@ Still to come: Better Auth, Cloudflare R2 storage, the pg-boss worker, next-intl
 ## Getting started
 
 ```bash
-git clone https://github.com/SiddharthMuramkar/friends-of-animals.git
+git clone https://github.com/siddhartxts/friends-of-animals.git
 cd friends-of-animals
 pnpm install
 cp .env.example .env          # defaults match the local database
@@ -224,9 +224,9 @@ pnpm exec playwright install --with-deps chromium   # once
 # Previews sit behind Vercel Authentication, so pass the project's
 # Protection Bypass for Automation secret (Vercel → Settings →
 # Deployment Protection), here read with the Vercel CLI without printing it:
-export VERCEL_AUTOMATION_BYPASS_SECRET="$(vercel api /v9/projects/friends-of-animals --scope acme-ef4b \
+export VERCEL_AUTOMATION_BYPASS_SECRET="$(vercel api /v9/projects/friends-of-animals --scope bitacu1 \
   | jq -r '.protectionBypass | to_entries[] | select(.value.scope == "automation-bypass") | .key')"
-PLAYWRIGHT_BASE_URL=https://friends-of-animals-<hash>-acme-ef4b.vercel.app pnpm test:e2e
+PLAYWRIGHT_BASE_URL=https://friends-of-animals-<hash>-bitacu1.vercel.app pnpm test:e2e
 
 # Staging needs no secret.
 PLAYWRIGHT_BASE_URL=https://shipped-it.dev pnpm test:e2e
@@ -237,7 +237,7 @@ PLAYWRIGHT_BASE_URL=http://localhost:3100 pnpm test:e2e
 
 Add `--ui` to watch the tests run, or `--project=desktop` for one viewport. A failed test leaves a trace and a screenshot in `test-results/`; open a trace with `pnpm exec playwright show-trace <path>/trace.zip`.
 
-The secret goes only to this project's own deployments (`https://friends-of-animals-…-acme-ef4b.vercel.app`), so a run pointed at localhost, staging or a mistyped URL never sends it. Global setup (`tests/e2e/global-setup.ts`) trades it once for Vercel's bypass cookie, saved in `playwright/.auth/` (git-ignored), and the tests use the cookie, so the secret never appears in a trace. The cookie does (it opens that one preview for a week), so CI strips it from traces before uploading them.
+The secret goes only to this project's own deployments (`https://friends-of-animals-…-bitacu1.vercel.app`), so a run pointed at localhost, staging or a mistyped URL never sends it. Global setup (`tests/e2e/global-setup.ts`) trades it once for Vercel's bypass cookie, saved in `playwright/.auth/` (git-ignored), and the tests use the cookie, so the secret never appears in a trace. The cookie does (it opens that one preview for a week), so CI strips it from traces before uploading them.
 
 ## Continuous integration
 
@@ -285,7 +285,7 @@ Vercel detects Next.js and runs the `vercel-build` script, which applies the mig
 
 - Migrations connect through `DIRECT_URL` only (the migrator role, which PgBouncer gives session mode), never `DATABASE_URL`. It must be available at **build** time: without it `pnpm db:migrate` exits with an error and the deployment fails.
 - Staging and production migrate the database `DIRECT_URL` names (`foa_staging`, `foa`) in place. Each preview deployment gets its own database (`foa_pr_<n>`, or `foa_br_<slug>_<hash>` before its PR) on the non-production Postgres, created during the build ([Databases on Vercel](#databases-on-vercel)).
-- The databases (Postgres 18 on the Mumbai VPS behind PgBouncer, with backups, and the `foa_seed` template) are set up in [#12](https://github.com/SiddharthMuramkar/friends-of-animals/issues/12), from `docker/` (runbook: [`docker/README.md`](docker/README.md)). Until `scripts/seed.ts` exists, `foa_seed` is empty and previews start with the schema only.
+- The databases (Postgres 18 on the Mumbai VPS behind PgBouncer, with backups, and the `foa_seed` template) are set up in [#12](https://github.com/siddhartxts/friends-of-animals/issues/12), from `docker/` (runbook: [`docker/README.md`](docker/README.md)). Until `scripts/seed.ts` exists, `foa_seed` is empty and previews start with the schema only.
 
 Set `APP_ENV`, `DATABASE_URL` and `DIRECT_URL` per environment in the Vercel project settings, and `APP_URL` for staging (`https://shipped-it.dev`) and production; without them the build fails. Vercel exposes them to the build as well as at runtime, which `APP_URL` needs.
 

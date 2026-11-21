@@ -58,7 +58,7 @@ return 0, but `issue_dependencies_summary` on every search hit is non-zero: nati
 expose them. M5 blocked_by sum = 24, blocking sum = 10 (query below, 2026-11-19).
 
 ```bash
-gh api -X GET search/issues -f q='repo:SiddharthMuramkar/friends-of-animals is:issue is:open M5 in:title' -f per_page=50 \
+gh api -X GET search/issues -f q='repo:siddhartxts/friends-of-animals is:issue is:open M5 in:title' -f per_page=50 \
   --jq '.items[] | [.number, .issue_dependencies_summary.blocked_by, .issue_dependencies_summary.blocking] | @tsv'
 ```
 
@@ -86,7 +86,7 @@ Runtime check (T2 runner with `gh`; cloud sessions cannot use GraphQL and gh 2.8
 ```bash
 for n in $(seq 105 118); do
   printf '#%s blocked_by=' "$n"
-  gh api "repos/SiddharthMuramkar/friends-of-animals/issues/$n/dependencies/blocked_by" --jq '[.[].number]'
+  gh api "repos/siddhartxts/friends-of-animals/issues/$n/dependencies/blocked_by" --jq '[.[].number]'
 done
 ```
 

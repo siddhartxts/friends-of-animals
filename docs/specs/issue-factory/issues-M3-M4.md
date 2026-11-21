@@ -10,7 +10,7 @@ state). Codebase skimmed at `3da7347` (read-only): `src/content/judging.ts`, `sr
 267–278), `src/app/robots.ts`, `src/lib/routes.ts`, `public/brand/README.md`, `playwright.config.ts`,
 `tests/e2e/smoke.spec.ts`, `package.json`, `pnpm-workspace.yaml`, `vercel.json`, `docker/`. Prior art (non-binding,
 superseded): `git show 8d06f2e:specifications/SPEC.md`. Live check 2026-11-19: `gh api -X GET search/issues -f
-q='repo:SiddharthMuramkar/friends-of-animals is:issue in:title M3'` (and `M4`) returned `issue_dependencies_summary` for all
+q='repo:siddhartxts/friends-of-animals is:issue in:title M3'` (and `M4`) returned `issue_dependencies_summary` for all
 12 tickets: the counts below are VERIFIED; the edges are INFERRED.
 
 ## 0. Conventions and milestone-wide findings
@@ -22,7 +22,7 @@ q='repo:SiddharthMuramkar/friends-of-animals is:issue in:title M3'` (and `M4`) r
 - **Depends-on** has three parts: **native** = GitHub blocked-by count (verified) with the edges that best fit every count
   (inferred; alternatives listed); **extra** = technical prerequisites outside the native closure, stored as `extraBlockers`
   in the ledger (never written to GitHub); **blocks**. Runtime verification: on T2
-  `gh api repos/SiddharthMuramkar/friends-of-animals/issues/<n>/dependencies/blocked_by --jq '[.[].number]'` and
+  `gh api repos/siddhartxts/friends-of-animals/issues/<n>/dependencies/blocked_by --jq '[.[].number]'` and
   `.../dependencies/blocking`; on T1 the counts via the search call above (GraphQL is blocked; the edges need T2 or the
   owner). Replace inferred edges with real ones; keep `extraBlockers`.
 - **AFK class:** A = every AC closable against fakes, residue at most shared/deduped; B = agent core merges, plus

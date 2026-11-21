@@ -8,7 +8,7 @@
 
 ### Issue tracker
 
-Issues live in GitHub Issues on SiddharthMuramkar/friends-of-animals, managed with the `gh` CLI. See `docs/agents/issue-tracker.md`.
+Issues live in GitHub Issues on siddhartxts/friends-of-animals, managed with the `gh` CLI. See `docs/agents/issue-tracker.md`.
 
 ### Triage labels
 

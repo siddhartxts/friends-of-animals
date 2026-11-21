@@ -1,6 +1,6 @@
 # Friends of Animals logo assets
 
-The FOA logo is a **registered mark**. Use these files as they are. Don't recolour, re-font, crop, stretch or rearrange them. Scale them only. The only other versions allowed are the two FOA approved in [#17](https://github.com/SiddharthMuramkar/friends-of-animals/issues/17) (see [Uses FOA approved](#uses-foa-approved)), and they're already in this folder.
+The FOA logo is a **registered mark**. Use these files as they are. Don't recolour, re-font, crop, stretch or rearrange them. Scale them only. The only other versions allowed are the two FOA approved in [#17](https://github.com/siddhartxts/friends-of-animals/issues/17) (see [Uses FOA approved](#uses-foa-approved)), and they're already in this folder.
 
 ## Files
 
@@ -68,7 +68,7 @@ The derivations live in `scripts/brand-logo.ts`, and `scripts/brand-logo.test.ts
 
 ## Uses FOA approved
 
-FOA answered in [#17](https://github.com/SiddharthMuramkar/friends-of-animals/issues/17):
+FOA answered in [#17](https://github.com/siddhartxts/friends-of-animals/issues/17):
 
 1. **The three F-O-A tiles may appear alone, without the "Friends of Animals" wordmark, at small sizes.** The favicons and the apple-touch-icon use the tiles alone. Everywhere else uses the full logo. A single tile on its own (for example, the O with the paw) hasn't been approved.
 2. **An all-white and an all-black version are allowed.** They are for dark backgrounds and photos, where the black wordmark disappears, and for one-colour printing. The site header uses the white version in dark mode.

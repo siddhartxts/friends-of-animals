@@ -100,7 +100,7 @@ be rotated (below).
 ## Bring-up on a fresh VPS
 
 ```sh
-git clone https://github.com/SiddharthMuramkar/friends-of-animals.git /srv/foa
+git clone https://github.com/siddhartxts/friends-of-animals.git /srv/foa
 cd /srv/foa/docker
 scripts/bootstrap-secrets.sh                 # /etc/foa/...
 scripts/install-cert.sh                      # placeholder cert so PgBouncer can start
@@ -344,7 +344,7 @@ then take a full backup.
 pg-nonprod databases whose comment starts with `foa-preview `:
 
 - `pr=<n>`: dropped (`DROP DATABASE ... WITH (FORCE)`) when
-  `GET /repos/SiddharthMuramkar/friends-of-animals/pulls/<n>` says
+  `GET /repos/siddhartxts/friends-of-animals/pulls/<n>` says
   `state=closed`;
 - `branch=<ref>`: dropped when `git ls-remote --exit-code --heads` reports the
   branch gone (exit 2).

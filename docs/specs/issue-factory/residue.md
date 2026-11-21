@@ -29,7 +29,7 @@ non-code prerequisites, `history-a.md` (closed #12 #13 #18 #23 #27 leftovers, ru
 | HR-03 | Read-only `GITHUB_TOKEN=` in `/etc/foa/sweeper.env` (0600): unauthenticated sweeper is capped at 60 calls/h (~55 PR DBs) | VPS ops | owner dev | every PR (preview DBs) | S2 (stale DBs exhaust pg-nonprod's 200 slots) | yes | D0 |
 | HR-04 | Vercel setting "Run up to one build per branch" (API refused it in #12; seed now runs in the build) | provider account | owner dev | #57 (all previews) | S2 (racing builds on rapid pushes) | yes | D0 |
 | HR-05 | Key ring `FIELD_ENCRYPTION_KEYS` (versioned), blind index `FIELD_HMAC_KEY`, `PII_HASH_KEY` (#75 duplicate hash) per environment; offline backup (lost key = lost data); rotation policy (R0-4, R-KEYS) | secret/env var | owner dev | #58 #73 #75 #76 #78 #81 #83 #108 | S2 (Preview keys); REL-main(M0) staging keys; REL-prod | yes | W1 |
-| HR-06 | Non-prod R2 buckets on an interim owner Cloudflare account (prefixes `staging/`, `pr-<n>/`, `br-<hash>/`, private + public), bucket-scoped token, CORS `PUT` from `https://friends-of-animals-*-acme-ef4b.vercel.app` and `https://shipped-it.dev` (R0-5, G7, R2-2, G14 non-prod) | provider account | owner dev | #63 #85 #86 #91 #103 #112 | S2 (#63 signed-URL, #91 journeys); REL-main(M0) | yes | W2 |
+| HR-06 | Non-prod R2 buckets on an interim owner Cloudflare account (prefixes `staging/`, `pr-<n>/`, `br-<hash>/`, private + public), bucket-scoped token, CORS `PUT` from `https://friends-of-animals-*-bitacu1.vercel.app` and `https://shipped-it.dev` (R0-5, G7, R2-2, G14 non-prod) | provider account | owner dev | #63 #85 #86 #91 #103 #112 | S2 (#63 signed-URL, #91 journeys); REL-main(M0) | yes | W2 |
 | HR-07 | Apply agent-written SQL for roles `foa_worker` / `staging_worker` / `nonprod_worker` (own schema `pgboss`), worker secrets in `/etc/foa/secrets`, `docker compose -f docker/workers.yml up -d`, CPU/memory caps (F9), confirm `worker-preview` attaches to a new `foa_pr_<n>` and lets go after the sweep (R0-6) | VPS ops | owner dev | #61 #66 #69 #71 | S2 (welcome email, worker-backed journeys); REL-main(M0) | yes | M0 |
 | HR-08 | ClamAV sidecar (~1-1.5 GB RAM) + scan job, R2 creds in worker env, `docker/scripts/preview-dropped.d/` hook purging `pr-<n>/` | VPS ops | owner dev | #63 #85 #86 #91 | S2 (uploads never reach `clean`); REL-main(M0) | yes | M0 |
 | HR-09 | Razorpay test mode: `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET` in Vercel Preview + staging; webhook `https://shipped-it.dev/api/webhooks/razorpay` (payment/order/refund); Subscriptions + `subscription.*` events (R-RAZORPAY, R-RZP-E2E, G10) | provider account | owner dev | #77 #78 #79 #80 #106 #107 #110 #133 | S2 (77c/110b run on the fallback adapter, recorded as such) | yes | M1 |
@@ -110,7 +110,7 @@ proofreading (English only at launch), #67's merge path (it is the M0 milestone 
   children out of the `M<k>:` title-prefix grouping. Grouped children use the lowest HR id; per-milestone children of one HR id
   (HR-10, HR-27) are keyed `HR-NN/M<k>`.
 - Dedupe before create: GitHub MCP `list_issues` (state open, labels `ready-for-human`) and match `HR-NN` in titles; on T2
-  `gh api -X GET search/issues -f q='repo:SiddharthMuramkar/friends-of-animals is:issue is:open "HR-NN" in:title'`; also keyword
+  `gh api -X GET search/issues -f q='repo:siddhartxts/friends-of-animals is:issue is:open "HR-NN" in:title'`; also keyword
   searches (off-site, favicon, DLT, Razorpay, SES) for human-filed issues (history R3). A match is appended to, never duplicated.
 - Parent: `sub_issue_write` (method `add`) under the Parent column's issue; "dashboard" = the pinned "Factory status" issue.
   Never attach to #55 (never edit #55). Every affected ticket's status comment links the child; every `REL-main(Mk)` child goes
@@ -180,7 +180,7 @@ Child count: 30 standing (C-31 only if Turnstile) + up to 38 per-milestone (C-07
 Must (the run starts degraded without them):
 - [ ] D0-1 Merge PR #137 (adds `.claude/skills`, 39 skills) into `main`, then merge `main` forward into `M0` ("Merge main (<sha>) into
       M0"). Or reply "fallback": the Orchestrator merges `claude/stoic-thompson-ukn0dx` into `M0`. Check: `git ls-tree -d origin/M0:.claude/skills | wc -l` >= 39.
-- [ ] D0-2 Approve Vercel MCP `authorize_team_access` for team `acme-ef4b`. Check: `get_project friends-of-animals` returns the project.
+- [ ] D0-2 Approve Vercel MCP `authorize_team_access` for team `bitacu1`. Check: `get_project friends-of-animals` returns the project.
 - [ ] D0-3 HR-01: set `BETTER_AUTH_SECRET` (Preview, staging, Production; distinct; `openssl rand -base64 48`), `CAPTURE_MAILBOX_TOKEN`
       (Preview, staging) in Vercel, and `gh secret set CAPTURE_MAILBOX_TOKEN` (same value as Preview).
 - [ ] D0-4 HR-02: merge the `e2e.yml` change to `main` (the Orchestrator prepares branch `ci/e2e-capture-token` -> `main` at
@@ -197,7 +197,7 @@ Must (the run starts degraded without them):
 Recommended on Day 0 (deadline in brackets):
 - [ ] D0-9 HR-03 sweeper token [before 50 open PRs]; D0-10 HR-04 one build per branch [before wave 1].
 - [ ] D0-11 Repo admin: `delete_branch_on_merge=true`; rulesets on `main` (require PR, block force-push and deletion) and on
-      `production` (block creation/updates). Check: `gh api repos/SiddharthMuramkar/friends-of-animals/rulesets`.
+      `production` (block creation/updates). Check: `gh api repos/siddhartxts/friends-of-animals/rulesets`.
 - [ ] D0-12 HR-05 Preview + staging keys [before #58's Seam 2, wave 1]; D0-13 HR-06 non-prod R2 bucket [before #63c, wave 2].
 - [ ] D0-14 Start FOA's long-lead clock: send FOA leadership the provider request pack (last copy at 8d06f2e
       `docs/foa/provider-setup-request.md`) covering HR-11..HR-17 (domain, SES/AWS, R2, DLT, Razorpay KYC, tax status, appointments).

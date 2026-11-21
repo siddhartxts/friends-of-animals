@@ -15,7 +15,7 @@ Sources read in full: `research/open-M1.json` (15 bodies, 0 comments), `research
 - Depends-on has three parts: **native** = GitHub blocked-by count (verified) and the edges that best fit every count in
   M0+M1 (INFERRED: the search API exposes counts, not edges); **extra** = technical prerequisites missing from the
   native closure, to be stored as `extraBlockers` in `docs/factory/ledger.json` (never written to GitHub); **blocks**.
-  Runtime verification by the Orchestrator: `gh api repos/SiddharthMuramkar/friends-of-animals/issues/<n>/dependencies/blocked_by --jq '[.[].number]'`
+  Runtime verification by the Orchestrator: `gh api repos/siddhartxts/friends-of-animals/issues/<n>/dependencies/blocked_by --jq '[.[].number]'`
   and `.../dependencies/blocking`; replace the inferred edges with the real ones, keep `extraBlockers`.
 - AFK class: A = every AC closable against fakes, residue at most shared/deduped (R-RET); B = agent core merges, plus
   ticket-specific human residue before production use; C = mostly human (none in M1).

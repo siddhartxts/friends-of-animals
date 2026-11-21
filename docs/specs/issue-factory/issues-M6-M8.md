@@ -4,7 +4,7 @@ Source: `open-M6.json`, `open-M7.json`, `open-M8.json`, `spec-55.md`, `raw-open.
 Analysed 2026-11-19. 17 tickets: #119–#135 = ordinals 64–80 (ordinal n = issue #(55+n); verified: #56 = ordinal 1, the
 closed CI ticket; #57 = ordinal 2). None of these 17 bodies cite another ticket by ordinal or number: every dependency below
 is inferred from the body text, the spec's module list and the M0–M5 ticket bodies. Native GitHub dependencies:
-`gh api -X GET search/issues -f q='repo:SiddharthMuramkar/friends-of-animals is:issue is:open is:blocked'` returned
+`gh api -X GET search/issues -f q='repo:siddhartxts/friends-of-animals is:issue is:open is:blocked'` returned
 `total_count 0` (same for `is:blocking`) on 2026-11-19. The Orchestrator re-runs both queries at plan time. All 17 are
 sub-issues of #55, labelled `ready-for-agent`, with 0 comments.
 

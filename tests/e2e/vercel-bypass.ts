@@ -6,9 +6,9 @@
  * or playwright-report/, which CI uploads. */
 export const BYPASS_STATE_PATH = "playwright/.auth/vercel-bypass.json";
 
-/** This project's deployment hosts on Vercel: friends-of-animals-<hash>-acme-ef4b
- * and friends-of-animals-git-<branch>-acme-ef4b. */
-const PROJECT_HOST = /^friends-of-animals-[a-z0-9-]+-acme-ef4b\.vercel\.app$/;
+/** This project's deployment hosts on Vercel: friends-of-animals-<hash>-bitacu1
+ * and friends-of-animals-git-<branch>-bitacu1. */
+const PROJECT_HOST = /^friends-of-animals-[a-z0-9-]+-bitacu1\.vercel\.app$/;
 
 type EnvLike = Record<string, string | undefined>;
 

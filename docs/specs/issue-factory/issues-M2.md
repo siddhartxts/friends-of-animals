@@ -40,7 +40,7 @@ count: 1 each except #87 (0); every comment is an owner decision record (0.3).
 
 ### 0.2 Native GitHub dependencies (counts exact, edges inferred)
 
-`gh api -X GET search/issues -f q='repo:SiddharthMuramkar/friends-of-animals is:issue is:open'` returns
+`gh api -X GET search/issues -f q='repo:siddhartxts/friends-of-animals is:issue is:open'` returns
 `issue_dependencies_summary` per issue. GitHub search exposes counts only (`is:blocked`, `is:blocking`, `blocking:<n>` return
 0; `blocked-by:85` returns #55, i.e. free text). Sum of M2 `blocked_by` = 18, sum of M2 `blocking` = 12.
 
@@ -63,7 +63,7 @@ at plan time (VPS runner with `gh`, or GraphQL `issue(number:<n>){ blockedBy(fir
 ```bash
 for n in 84 85 86 87 88 89 90 91 92; do
   printf '#%s blocked_by=' "$n"
-  gh api "repos/SiddharthMuramkar/friends-of-animals/issues/$n/dependencies/blocked_by" --jq '[.[].number]'
+  gh api "repos/siddhartxts/friends-of-animals/issues/$n/dependencies/blocked_by" --jq '[.[].number]'
 done
 ```
 
@@ -966,7 +966,7 @@ Blocking an acceptance criterion or the milestone journey (raise at M2 start; id
   `submitted`), any manual preview check of 85a/86a. Owner. `wizard` script: `git -C /srv/foa pull` + `docker compose -f
   /srv/foa/docker/workers.yml up -d --build --wait worker-media` + `docker stats --no-stream` check + one EICAR and one HEIC
   smoke upload against staging.
-- R2-2 (G7) Non-production R2 bucket, scoped token, CORS allowing `PUT` from `https://friends-of-animals-*-acme-ef4b.vercel.app`
+- R2-2 (G7) Non-production R2 bucket, scoped token, CORS allowing `PUT` from `https://friends-of-animals-*-bitacu1.vercel.app`
   and `https://shipped-it.dev`. Blocks 91b. Dedupe with #63's R0-5.
 - R2-3 Only if 91b's design needs a new secret or env var in `e2e.yml`: owner merges that `e2e.yml` change to `main` first
   (e2e runs from `main`). Preferred design avoids it.

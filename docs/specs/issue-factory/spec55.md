@@ -14,7 +14,7 @@ MCP); `raw-prs.json`; #55 sub-issues with `issue_dependencies_summary`; repo mai
 - All 80 (#56–#135) are native sub-issues of #55. All 79 open tickets + #55 carry `ready-for-agent`.
 - **Native dependencies exist**: 125 blocked-by edges, all inside #56–#135 (sum blocked_by = sum blocking = 125). GitHub search
   cannot list edges (`is:blocked` returns 0; `blocked-by:N` is treated as text). The Orchestrator reads edges at runtime with
-  `gh api repos/SiddharthMuramkar/friends-of-animals/issues/<n>/dependencies/blocked_by --jq '[.[].number]'` and cross-checks
+  `gh api repos/siddhartxts/friends-of-animals/issues/<n>/dependencies/blocked_by --jq '[.[].number]'` and cross-checks
   the counts in the table below. Zero-blocker open tickets: **#57, #66, #67, #118**.
 - **In-flight work outside main**: draft PR #136 "M0 foundations" (head `M0`, base `main`, 3 commits, 7 files, +722/−152, ops
   scripts only, mergeable clean). #67 (restore drill) is merged into `M0` at `9c69f10` (comment on #67: all 6 ACs met, drills
